@@ -38,81 +38,26 @@ bool imu_flag = false;
 
 bool setPower(bool on)
 {
-
-	// std::cout << "debug_on" << std::endl; // OK
-
-	std::ofstream motor_dir("/sys/class/gpio/gpio149/direction");
-	if(not motor_dir.is_open()){
-		std::cout << "motor_dir_fail_open" << std::endl;
+	std::ofstream ofs("/dev/rtmotoren0");
+	if(not ofs.is_open())
 		return false;
-	}
 
-	motor_dir << "out" << std::endl;
-
-	std::ofstream motor_value("/sys/class/gpio/gpio149/value");
-	if(not motor_value.is_open()){
-		std::cout << "motor_val_fail_open" << std::endl;
-		return false;
-	}
-
-	motor_value << (on ? '1' : '0') << std::endl;
+	ofs << (on ? '1' : '0') << std::endl;
 	is_on = on;
 	return true;
 }
 
 void setFreqs(int left, int right)
 {
-	// std::ofstream ofsL("/dev/rtmotor_raw_l0");
-	// std::ofstream ofsR("/dev/rtmotor_raw_r0");
-	// if( (not ofsL.is_open()) or (not ofsR.is_open()) ){
-	// 	ROS_ERROR("Cannot open /dev/rtmotor_raw_{l,r}0");
-	// 	return;
-	// }
+	std::ofstream ofsL("/dev/rtmotor_raw_l0");
+	std::ofstream ofsR("/dev/rtmotor_raw_r0");
+	if( (not ofsL.is_open()) or (not ofsR.is_open()) ){
+		ROS_ERROR("Cannot open /dev/rtmotor_raw_{l,r}0");
+		return;
+	}
 
-	// ofsL << left << std::endl;
-	// ofsR << right << std::endl;
-	// std::cout << "debug0" << std::endl;
-
-	int left_period = 0;
-	if(left != 0)
-		left_period = 1000000 / left;
-	else
-		left_period = 0;
-	std::ofstream motor_left_pwm_period("/sys/devices/7000a000.pwm/pwm/pwmchip0/pwm0/period");
-	motor_left_pwm_period << left_period << std::endl;
-	std::ofstream motor_left_pwm_duty("/sys/devices/7000a000.pwm/pwm/pwmchip0/pwm0/duty_cycle");
-	motor_left_pwm_duty << left_period /2 << std::endl;
-	std::ofstream motor_left_pwm_en("/sys/devices/7000a000.pwm/pwm/pwmchip0/pwm0/enable");
-	motor_left_pwm_en << 1 << std::endl;
-	std::ofstream motor_left_dir_pin("/sys/class/gpio/gpio200/direction");
-	motor_left_dir_pin << "out" << std::endl;
-	std::ofstream motor_left_value_pin("/sys/class/gpio/gpio200/value");
-	if(left <0)
-		motor_left_value_pin << 1 << std::endl;
-	else
-		motor_left_value_pin << 0 << std::endl;
-	
-	int right_period =0;
-	if(right != 0)
-		right_period = 1000000 / right;
-	else
-		right_period = 0;
-
-	std::ofstream motor_right_pwm_period("/sys/devices/7000a000.pwm/pwm/pwmchip0/pwm2/period");
-	motor_right_pwm_period << right_period << std::endl;
-	std::ofstream motor_right_pwm_duty("/sys/devices/7000a000.pwm/pwm/pwmchip0/pwm2/duty_cycle");
-	motor_right_pwm_duty << right_period /2 << std::endl;
-	std::ofstream motor_right_pwm_en("/sys/devices/7000a000.pwm/pwm/pwmchip0/pwm2/enable");
-	motor_right_pwm_en << 1 << std::endl;
-	std::ofstream motor_right_dir_pin("/sys/class/gpio/gpio76/direction");
-	motor_right_dir_pin << "out" << std::endl;
-	std::ofstream motor_right_value_pin("/sys/class/gpio/gpio76/value");
-	motor_right_value_pin << 1 << std::endl;
-	if(right <0)
-		motor_right_value_pin << 0 << std::endl;
-	else
-		motor_right_value_pin << 1 << std::endl;
-
+	ofsL << left << std::endl;
+	ofsR << right << std::endl;
 }
 
 void onSigint(int sig)
@@ -168,8 +113,6 @@ void callbackRaw(const raspimouse_ros_2::MotorFreqs::ConstPtr& msg)
 
 void callbackCmdvel(const geometry_msgs::Twist::ConstPtr& msg)
 {
-	std::cout << "debug1" << std::endl;
-
 	vel.linear.x = msg->linear.x;
 
 	if(!imu_flag)
@@ -258,16 +201,6 @@ int main(int argc, char **argv)
 
 	signal(SIGINT, onSigint);
 
-	std::ofstream gpio_exp("/sys/class/gpio/export");
-	gpio_exp << 149 << std::endl;
-	gpio_exp << 200 << std::endl;
-	gpio_exp << 76 << std::endl;
-	std::ofstream motor_pwm_exp("/sys/devices/7000a000.pwm/pwm/pwmchip0/export");
-	motor_pwm_exp << 0 << std::endl;	
-	motor_pwm_exp << 2 << std::endl;	
-	// std::ofstream motor_pwm_unexp("/sys/devices/7000a000.pwm/pwm/pwmchip0/unexport");
-
-
 	last_cmdvel = Time::now();
 	cur_time = Time::now();
 	send_time = Time::now();
@@ -289,11 +222,9 @@ int main(int argc, char **argv)
 
 	Rate loop_rate(10);
 	while(ok()){
-		// std::cout << "debug2" << std::endl; //OK
 		if(in_cmdvel and Time::now().toSec() - last_cmdvel.toSec() >= 1.0){
 			setFreqs(0,0);
 			in_cmdvel = false;
-			std::cout << "debug3" << std::endl; //OK
 		}
 
 		pub_odom.publish(send_odom());
