@@ -1,20 +1,18 @@
 <?xml version="1.0"?>
 <package>
-  <name>raspimouse_ros_2</name>
+  <name>raspimouse_with_Jetson_nano</name>
   <version>0.0.1</version>
-  <description>Base nodes for Rasberry Pi Mouse</description>
+  <description>Base nodes for Rasberry Pi Mouse with Jetson nano</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <!-- Example:  -->
   <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
-  <maintainer email="ryuichiueda@gmail.com">Ryuichi Ueda</maintainer>
+  <maintainer email="tad.imokawa@gmail.com">Imoakwa Tadashi</maintainer>
 
 
   <!-- One license tag required, multiple allowed, one license per tag -->
   <!-- Commonly used license strings: -->
   <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
-  <license>BSD</license>
-
 
   <!-- Url tags are optional, but mutiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
@@ -25,7 +23,6 @@
   <!-- Author tags are optional, mutiple are allowed, one per tag -->
   <!-- Authors do not have to be maintianers, but could be -->
   <!-- Example: -->
-  <author email="ryuichiueda@gmail.com">Ryuichi Ueda</author>
 
 
   <!-- The *_depend tags are used to specify dependencies -->
