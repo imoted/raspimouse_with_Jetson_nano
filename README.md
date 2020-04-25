@@ -1,8 +1,8 @@
 # raspimouse_with_Jetson_nano
 
-The package is for raspimouse [http://products.rt-net.jp/micromouse/raspberry-pi-mouse] with Jetson Nano hardware.
-This package is derived from "pimouse_ros_2" package[https://github.com/ryuichiueda/raspimouse_ros_2]
-Currecntly only work with the motor. without buzzar, light sensor, switch, LED
+* The package is for raspimouse [http://products.rt-net.jp/micromouse/raspberry-pi-mouse] with Jetson Nano hardware.
+* This package is derived from "pimouse_ros_2" package[https://github.com/ryuichiueda/raspimouse_ros_2]
+* Currecntly only work with the motor. without buzzar, light sensor, switch, LED
 
 ## Requirements
 
