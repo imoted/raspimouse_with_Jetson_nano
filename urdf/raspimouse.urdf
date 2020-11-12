@@ -1,0 +1,84 @@
+<robot name="raspimouse">
+  <link name="base_link"/>
+
+  <joint name="lidar_joint" type="fixed">
+    <origin xyz="0.025 0 0.12" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+  </joint>
+
+  <link name="lidar_link">
+    <visual>
+      <origin xyz="0 0 0" />
+      <geometry>
+        <cylinder length="0.05" radius="0.03" />
+      </geometry>
+      <material name="gray" />
+    </visual>
+  </link>
+
+  <joint name="imu_joint" type="fixed">
+    <origin xyz="-0.035 -0.04 0.055" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="base_link"/>
+    <child link="imu"/>
+  </joint>
+
+  <link name="imu">
+    <visual>
+      <origin xyz="0 0 0" />
+      <geometry>
+        <cylinder length="0.05" radius="0.03" />
+      </geometry>
+      <material name="gray" />
+    </visual>
+  </link>
+
+
+  <!-- <joint name="base_joint" type="fixed">
+    <origin xyz="0 0 0.00185"/>
+    <parent link="base_footprint"/>
+    <child link="base_body"/>
+  </joint>
+
+  <link name="base_body">
+    <visual>
+      <geometry>
+        <mesh filename="package://raspimouse_description/meshes/dae/base/RasPiMouse_base.dae"/>
+      </geometry>
+    </visual>
+  </link> -->
+
+
+<!-- 
+  <joint name="left-wheel_joint" type="continuous">
+    <origin xyz="0 0.0425 0.02215" rpy="-1.57 0 0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="base_body"/>
+    <child link="left-wheel"/>
+  </joint>
+
+  <link name="left-wheel">
+    <visual>
+      <geometry>
+        <mesh filename="package://raspimouse_description/meshes/dae/wheel/RasPiMouse_wheel.dae"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="right-wheel_joint" type="continuous">
+    <origin xyz="0 -0.0425 0.02215" rpy="1.57 0 0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="base_body"/>
+    <child link="right-wheel"/>
+  </joint>
+
+  <link name="right-wheel">
+    <visual>
+      <geometry>
+        <mesh filename="package://raspimouse_description/meshes/dae/wheel/RasPiMouse_wheel.dae"/>
+      </geometry>
+    </visual>
+  </link> -->
+</robot>

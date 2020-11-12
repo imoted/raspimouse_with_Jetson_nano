@@ -1,17 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <launch>
   <arg name="imu" default="0" />
+  <arg name="cam" default="0" />
   <include if="$(arg imu)" file="$(find rt_usb_9axis_sensor)/launch/rt_usb_9axis_sensor.launch" />
 
   <node pkg="raspimouse_ros_2" name="buzzer" type="buzzer.py" required="true" />
 
   <node pkg="raspimouse_ros_2" name="lightsensors" type="lightsensors" required="true">
-    <param name="frequency" value="10" />
+    <param name="frequency" value="100" />
   </node>
 
-  <arg name="initial_motor_power" default="off" />
+  <arg name="initial_motor_power" default="on" />
   <node pkg="raspimouse_ros_2" name="motors" type="motors" required="true"
     output="screen" args="$(arg initial_motor_power)" />
 
   <node pkg="raspimouse_ros_2" name="leds" type="leds" required="true" />
   <node pkg="raspimouse_ros_2" name="buttons" type="buttons" required="true" />
+  <group if ="$(arg cam)">
+    <include file="$(find usb_cam)/launch/usb_cam_microsoft.launch" />
+  </group>
+
+  <param name="param_imu_frame" value="base_link"/>
+  <node pkg="raspimouse_ros_2" type="imu_ros_node.py" name="imu_node"/>
+
+  <param name="robot_description"
+    textfile="$(find raspimouse_ros_2)/urdf/raspimouse.urdf" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher"
+    type="robot_state_publisher" />
+
 </launch>

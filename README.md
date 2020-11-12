@@ -80,6 +80,42 @@ source ~/catkin_ws/devel/setup.bash
 roslaunch raspimouse_ros_2 raspimouse.launch
 rostopic pub /buzzer std_msgs/UInt16 1000
 ```
+## Support of MPU6050
+
+At first you need to setup I2C permissions for non-root users.
+
+1) Create new user group called i2c:
+
+```
+user@machine:~ sudo groupadd i2c
+```
+2) Change the group ownership of /dev/i2c-1 to i2c:
+```
+user@machine:~ sudo chown :i2c /dev/i2c-1
+```
+3) Change the file permissions of the device /dev/i2c-1 so users of the i2c group can read and write to the device:
+```
+user@machine:~ sudo chmod g+rw /dev/i2c-1
+```
+4) Add your user to the group i2c:
+```
+user@machine:~ sudo usermod -aG i2c user
+```
+5) After you logout and login again you should be able to run i2cdetect -y 1.
+
+The listing blow shows an example output of the command. As one can see, I connected three I2C devices to my Raspberry Pi 2.
+```
+user@machine:~ i2cdetect -y 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- 04 -- -- -- -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- 39 -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- 77
+```
 
 ## Support of RT-USB-9axisIMU2
 
