@@ -14,7 +14,7 @@ class MPU6050_class:
             self.mpu6050 = MPU6050.MPU6050()
             self.imu_pub = rospy.Publisher("imu", Imu, queue_size=10)
             self.imu_data = Imu()
-            param_frame = rospy.get_param("param_imu_frame", default="0")
+            param_frame = rospy.get_param("~param_imu_frame", default="0")
             self.imu_data.header.frame_id = param_frame
             self.read_loop()
 

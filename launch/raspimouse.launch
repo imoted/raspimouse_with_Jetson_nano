@@ -20,8 +20,9 @@
     <include file="$(find usb_cam)/launch/usb_cam_microsoft.launch" />
   </group>
 
-  <param name="param_imu_frame" value="base_link"/>
-  <node pkg="raspimouse_ros_2" type="imu_ros_node.py" name="imu_node"/>
+  <node pkg="raspimouse_ros_2" type="imu_ros_node.py" name="imu_node">
+    <param name="param_imu_frame" value="base_link"/>  
+  </node>
 
   <param name="robot_description"
     textfile="$(find raspimouse_ros_2)/urdf/raspimouse.urdf" />
