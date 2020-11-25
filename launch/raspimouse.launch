@@ -20,9 +20,15 @@
     <include file="$(find usb_cam)/launch/usb_cam_microsoft.launch" />
   </group>
 
-  <node pkg="raspimouse_ros_2" type="imu_ros_node.py" name="imu_node">
+  <!-- <node pkg="raspimouse_ros_2" type="imu_ros_node.py" name="imu_node">
     <param name="param_imu_frame" value="base_link"/>  
-  </node>
+  </node> -->
+
+  <include file="$(find driver_mpu9250)/imu.launch">
+    <arg name="arg_i2c_address" value="0x68"/>
+    <arg name="arg_interrupt_gpio_pin" value="14"/>
+    <arg name="arg_max_data_rate" value="100"/>
+  </include>
 
   <param name="robot_description"
     textfile="$(find raspimouse_ros_2)/urdf/raspimouse.urdf" />
