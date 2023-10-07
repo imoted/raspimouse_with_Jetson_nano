@@ -1,6 +1,6 @@
 #include "ros/ros.h"
-#include <ros/package.h> 
-#include "raspimouse_with_Jetson_nano/LightSensorValues.h"
+#include <ros/package.h>
+#include "raspimouse_with_jetson_nano/LightSensorValues.h"
 #include <fstream>
 using namespace ros;
 
@@ -18,12 +18,12 @@ int main(int argc, char **argv)
 	init(argc,argv,"lightsensors");
 	NodeHandle n("~");
 
-	Publisher pub = n.advertise<raspimouse_with_Jetson_nano::LightSensorValues>("/lightsensors", 5);
+	Publisher pub = n.advertise<raspimouse_with_jetson_nano::LightSensorValues>("/lightsensors", 5);
 
 	int freq = 10;
 
 	ros::Rate loop_rate(freq);
-	raspimouse_with_Jetson_nano::LightSensorValues msg;
+	raspimouse_with_jetson_nano::LightSensorValues msg;
 
 	unsigned int c = 0;
 	while(ok()){
@@ -49,4 +49,3 @@ int main(int argc, char **argv)
 	}
 	exit(0);
 }
-

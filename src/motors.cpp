@@ -1,10 +1,10 @@
 #include <ros/ros.h>
 #include <signal.h>
-#include <ros/package.h> 
+#include <ros/package.h>
 #include "std_srvs/Trigger.h"
 #include "geometry_msgs/Twist.h"
-#include "raspimouse_with_Jetson_nano/MotorFreqs.h"
-#include "raspimouse_with_Jetson_nano/TimedMotion.h"
+#include "raspimouse_with_jetson_nano/MotorFreqs.h"
+#include "raspimouse_with_jetson_nano/TimedMotion.h"
 #include <nav_msgs/Odometry.h>
 #include <tf/tf.h>
 #include <tf2/LinearMath/Quaternion.h>
@@ -20,8 +20,8 @@ void setFreqs(int left, int right);
 // void onSigint(int);
 bool callbackOn(std_srvs::Trigger::Request&, std_srvs::Trigger::Response&);
 bool callbackOff(std_srvs::Trigger::Request&, std_srvs::Trigger::Response&);
-bool callbackTimedMotion(raspimouse_with_Jetson_nano::TimedMotion::Request&, raspimouse_with_Jetson_nano::TimedMotion::Response&);
-void callbackRaw(const raspimouse_with_Jetson_nano::MotorFreqs::ConstPtr& msg);
+bool callbackTimedMotion(raspimouse_with_jetson_nano::TimedMotion::Request&, raspimouse_with_jetson_nano::TimedMotion::Response&);
+void callbackRaw(const raspimouse_with_jetson_nano::MotorFreqs::ConstPtr& msg);
 void callbackCmdvel(const geometry_msgs::Twist::ConstPtr& msg);
 void callback9Axis(const sensor_msgs::Imu::ConstPtr& msg);
 
@@ -126,7 +126,7 @@ bool callbackOff(std_srvs::Trigger::Request& request, std_srvs::Trigger::Respons
 	return true;
 }
 
-bool callbackTimedMotion(raspimouse_with_Jetson_nano::TimedMotion::Request& request, raspimouse_with_Jetson_nano::TimedMotion::Response& response)
+bool callbackTimedMotion(raspimouse_with_jetson_nano::TimedMotion::Request& request, raspimouse_with_jetson_nano::TimedMotion::Response& response)
 {
 	if(not is_on){
 		ROS_INFO("Motors are not enpowered");
@@ -146,7 +146,7 @@ bool callbackTimedMotion(raspimouse_with_Jetson_nano::TimedMotion::Request& requ
 	return true;
 }
 
-void callbackRaw(const raspimouse_with_Jetson_nano::MotorFreqs::ConstPtr& msg)
+void callbackRaw(const raspimouse_with_jetson_nano::MotorFreqs::ConstPtr& msg)
 {
 	setFreqs(msg->left_hz, msg->right_hz);
 }
@@ -246,8 +246,8 @@ int main(int argc, char **argv)
 	gpio_exp << 200 << std::endl;
 	gpio_exp << 76 << std::endl;
 	std::ofstream motor_pwm_exp("/sys/devices/7000a000.pwm/pwm/pwmchip0/export");
-	motor_pwm_exp << 0 << std::endl;	
-	motor_pwm_exp << 2 << std::endl;	
+	motor_pwm_exp << 0 << std::endl;
+	motor_pwm_exp << 2 << std::endl;
 
 	last_cmdvel = Time::now();
 	cur_time = Time::now();
@@ -255,8 +255,8 @@ int main(int argc, char **argv)
 
 	ServiceServer srv_on = n.advertiseService("motor_on", callbackOn);
 	ServiceServer srv_off = n.advertiseService("motor_off", callbackOff);
-	ServiceServer srv_tm = n.advertiseService("timed_motion", callbackTimedMotion); 
-	
+	ServiceServer srv_tm = n.advertiseService("timed_motion", callbackTimedMotion);
+
 	Subscriber sub_raw = n.subscribe("motor_raw", 10, callbackRaw);
 	Subscriber sub_cmdvel = n.subscribe("cmd_vel", 10, callbackCmdvel);
 	Subscriber sub_9axis = n.subscribe("/imu/data_raw", 10, callback9Axis);
@@ -279,6 +279,6 @@ int main(int argc, char **argv)
 		spinOnce();
 		loop_rate.sleep();
 	}
-	
+
 	exit(0);
 }
